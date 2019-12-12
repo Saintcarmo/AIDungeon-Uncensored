@@ -122,29 +122,22 @@ class Story():
 
 
         story_json = self.to_json()
-        file_name = "story" + str(self.uuid) + ".json"
+        file_name = "stories\story" + str(self.uuid) + ".json"
         f = open(file_name, "w")
         f.write(story_json)
         f.close()
-
-        FNULL = open(os.devnull, 'w')
-        p = Popen(['gsutil', 'cp', file_name, 'gs://aidungeonstories'], stdout=FNULL, stderr=subprocess.STDOUT)
+        
         return self.uuid
 
     def load_from_storage(self, story_id):
 
-        file_name = "story" + story_id + ".json"
-        cmd = "gsutil cp gs://aidungeonstories/" + file_name + " ."
-        os.system(cmd)
-        exists = os.path.isfile(file_name)
-
-        if exists:
+        file_name = "stories\story" + story_id + ".json"
+  
             with open(file_name, 'r') as fp:
                 game = json.load(fp)
             self.init_from_dict(game)
             return str(self)
-        else:
-            return "Error save not found."
+     
 
 
 class StoryManager():
